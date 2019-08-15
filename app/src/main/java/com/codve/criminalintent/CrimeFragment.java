@@ -14,6 +14,8 @@ import android.widget.EditText;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import static android.widget.CompoundButton.*;
+
 public class CrimeFragment extends Fragment {
 
     private Crime mCrime;
@@ -38,7 +40,7 @@ public class CrimeFragment extends Fragment {
             public void beforeTextChanged(
                     CharSequence s, int start, int count, int after
             ) {
-                // todo
+
             }
 
             @Override
@@ -50,7 +52,7 @@ public class CrimeFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                // todo
+
             }
         });
 
@@ -59,7 +61,7 @@ public class CrimeFragment extends Fragment {
         mDateButton.setEnabled(false); // 禁止点击
 
         mSolvedCheckBox = v.findViewById(R.id.crime_solved);
-        mSolvedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        mSolvedCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 mCrime.setSolved(b);
