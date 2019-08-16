@@ -80,7 +80,7 @@ public class CrimeListFragment extends Fragment {
         // 响应点击
         @Override
         public void onClick(View view) {
-            Intent intent = MainActivity.newIntent(getActivity(), mCrime.getId());
+            Intent intent = CrimePagerActivity.newIntent(getActivity(), mCrime.getId());
             startActivity(intent);
         }
     }

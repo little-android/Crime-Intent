@@ -32,10 +32,6 @@ public class Crime {
         mTitle = title;
     }
 
-    public void setDate(Date date) {
-        mDate = date;
-    }
-
     public boolean isSolved() {
         return mSolved;
     }
