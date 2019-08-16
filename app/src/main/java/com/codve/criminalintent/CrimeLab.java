@@ -10,7 +10,7 @@ public class CrimeLab {
 
     private static CrimeLab sCrimeLab; // 单例
 
-    private List<Crime> mCrimes;
+    private List<Crime> mCrimes; // 数据库
 
     public static CrimeLab get(Context context) {
         if (sCrimeLab == null) {
