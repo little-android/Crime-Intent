@@ -13,7 +13,11 @@ public class Crime {
     private SimpleDateFormat mTimeFormat;
 
     public Crime() {
-        mId = UUID.randomUUID();
+        this(UUID.randomUUID()); // 相当于调用 Crime(UUID id)
+    }
+
+    public Crime(UUID id) {
+        mId = id;
         mDate = new Date();
         mDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         mTimeFormat = new SimpleDateFormat("HH:mm:ss");
