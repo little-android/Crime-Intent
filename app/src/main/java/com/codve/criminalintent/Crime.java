@@ -10,6 +10,7 @@ public class Crime {
     private Date mDate;
     private boolean mSolved;
     private SimpleDateFormat mDateFormat;
+    private String mSuspect;
 
     public Crime() {
         this(UUID.randomUUID()); // 相当于调用 Crime(UUID id)
@@ -51,5 +52,13 @@ public class Crime {
 
     public void setSolved(boolean solved) {
         mSolved = solved;
+    }
+
+    public String getSuspect() {
+        return mSuspect;
+    }
+
+    public void setSuspect(String suspect) {
+        mSuspect = suspect;
     }
 }
