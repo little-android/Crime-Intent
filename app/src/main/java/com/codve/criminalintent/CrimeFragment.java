@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -31,6 +32,7 @@ public class CrimeFragment extends Fragment {
     private EditText mTitleField; // 输入框
     private Button mDateButton; // 日期按钮
     private Button mTimeButton; // 时间按钮
+    private Button mDeleteButton; // 删除按钮
     private CheckBox mSolvedCheckBox; // 单选框
 
     private static final String ARG_CRIME_ID = "crime_id";
@@ -111,7 +113,17 @@ public class CrimeFragment extends Fragment {
                 // 设置时间对话框 fragment 的模板为 crimeFragment
                 dialog.setTargetFragment(CrimeFragment.this, REQUEST_TIME);
                 dialog.show(manager, DIALOG_TIME);
+            }
+        });
 
+        mDeleteButton = v.findViewById(R.id.crime_delete);
+        mDeleteButton.setText(R.string.crime_delete_label);
+        mDeleteButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CrimeLab.get(getActivity()).deleteCrime(mCrime.getId());
+                AppCompatActivity activity = (AppCompatActivity) getActivity();
+                activity.finish();
             }
         });
 

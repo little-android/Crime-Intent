@@ -22,14 +22,6 @@ public class CrimeLab {
     // 私有构造方法
     private CrimeLab(Context context) {
         mCrimes = new ArrayList<>();
-
-        // 生成 100 个 crime
-        for (int i = 0; i < 100; i++) {
-            Crime crime = new Crime();
-            crime.setTitle("Crime #" + i);
-            crime.setSolved(i % 2 == 0);
-            mCrimes.add(crime);
-        }
     }
 
     public List<Crime> getCrimes() {
@@ -44,4 +36,17 @@ public class CrimeLab {
         }
         return null;
     }
+
+    public void deleteCrime(UUID uuid) {
+        for (Crime crime : mCrimes) {
+            if (crime.getId().equals(uuid)) {
+                mCrimes.remove(crime);
+            }
+        }
+    }
+
+    public void addCrime(Crime crime) {
+        mCrimes.add(crime);
+    }
+
 }
