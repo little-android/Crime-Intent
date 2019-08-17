@@ -3,10 +3,12 @@ package com.codve.criminalintent;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
@@ -17,13 +19,18 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.ShareCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import java.io.File;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import static android.widget.CompoundButton.*;
@@ -31,16 +38,20 @@ import static android.widget.CompoundButton.*;
 public class CrimeFragment extends Fragment {
 
     private Crime mCrime;
+    private File mPhotoFile;
     private EditText mTitleField; // 输入框
     private Button mDateButton; // 时间
     private CheckBox mSolvedCheckBox; // 单选框
     private Button mReportButton; // 发送报告按钮
     private Button mSuspectButton; // 添加嫌疑人按钮
+    private ImageButton mPhotoButton; // 拍照按钮
+    private ImageView mPhotoView; //预览图
 
     private static final String ARG_CRIME_ID = "crime_id";
     private static final String DIALOG_DATE = "DialogDate";
     private static final int REQUEST_DATE = 0;
     private static final int REQUEST_CONTACT = 2;
+    private static final int REQUEST_PHOTO = 4;
 
     // 创建 fragment 实例, 并传入 argument
     public static CrimeFragment newInstance(UUID crimeId) {
@@ -58,6 +69,7 @@ public class CrimeFragment extends Fragment {
 
         UUID crimeId = (UUID) getArguments().getSerializable(ARG_CRIME_ID);
         mCrime = CrimeLab.get(getActivity()).getCrime(crimeId);
+        mPhotoFile = CrimeLab.get(getActivity()).getPhotoFile(mCrime);
     }
 
     @Override
@@ -139,8 +151,6 @@ public class CrimeFragment extends Fragment {
                         .getIntent();*/
 
                 startActivity(intent);
-
-
             }
         });
 
@@ -165,6 +175,39 @@ public class CrimeFragment extends Fragment {
             mSuspectButton.setEnabled(false);
         }
 
+        mPhotoButton = (ImageButton) v.findViewById(R.id.crime_camera);
+        // 创建打开相机的 Intent
+        final Intent captureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        // 文件必须有地方存储, 且有相机应用
+        boolean canTakePhoto = mPhotoFile != null &&
+                captureImage.resolveActivity(packageManager) != null;
+        mPhotoButton.setEnabled(canTakePhoto);
+
+        mPhotoButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 将本地文件路径转换为相机可以看见的 URI 形式
+                Uri uri = FileProvider.getUriForFile(getActivity(),
+                        "com.codve.criminalintent.fileprovider",
+                        mPhotoFile);
+                captureImage.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+
+                // 给所有相机activity 授权, 允许它们向 URI 写入文件
+                List<ResolveInfo> cameraActivities = getActivity()
+                        .getPackageManager().queryIntentActivities(captureImage,
+                                PackageManager.MATCH_DEFAULT_ONLY);
+                for (ResolveInfo activity : cameraActivities) {
+                    getActivity().grantUriPermission(activity.activityInfo.packageName,
+                            uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                }
+                startActivityForResult(captureImage, REQUEST_PHOTO);
+            }
+        });
+
+
+
+        mPhotoView = (ImageView) v.findViewById(R.id.crime_photo);
         return v;
     }
 
