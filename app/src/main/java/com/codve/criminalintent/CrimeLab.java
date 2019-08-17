@@ -68,10 +68,6 @@ public class CrimeLab {
         }
     }
 
-    public void deleteCrime(UUID uuid) {
-        // todo
-    }
-
     // 插入记录
     public void addCrime(Crime crime) {
         ContentValues values = getContentValues(crime);
@@ -99,6 +95,14 @@ public class CrimeLab {
                 null
         );
         return new CrimeCursorWrapper(cursor);
+    }
+
+    // 删除记录
+    public void deleteCrime(Crime crime) {
+        String uuidString = crime.getId().toString();
+        mDatabase.delete(CrimeTable.NAME,
+                CrimeTable.Cols.UUID + " = ?",
+                new String[] {uuidString});
     }
 
     private static ContentValues getContentValues(Crime crime) {
