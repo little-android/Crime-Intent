@@ -19,6 +19,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.ShareCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -128,7 +129,18 @@ public class CrimeFragment extends Fragment {
                 intent.putExtra(Intent.EXTRA_SUBJECT,
                         getString(R.string.crime_report_subject)); // 设置主题
 //                intent = Intent.createChooser(intent, getString(R.string.send_report));
+
+                // 使用 shareCompact 发送信息
+/*                Intent intent = ShareCompat.IntentBuilder
+                        .from(getActivity())
+                        .setType("text/plain")
+                        .setText(getCrimeReport())
+                        .setSubject(getString(R.string.send_report))
+                        .getIntent();*/
+
                 startActivity(intent);
+
+
             }
         });
 
