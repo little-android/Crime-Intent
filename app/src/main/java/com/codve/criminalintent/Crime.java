@@ -10,15 +10,21 @@ public class Crime {
     private Date mDate;
     private boolean mSolved;
     private SimpleDateFormat mDateFormat;
+    private SimpleDateFormat mTimeFormat;
 
     public Crime() {
         mId = UUID.randomUUID();
         mDate = new Date();
         mDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        mTimeFormat = new SimpleDateFormat("HH:mm:ss");
     }
 
     public String getFormatDate() {
         return mDateFormat.format(mDate);
+    }
+
+    public String getFormatTime() {
+        return mTimeFormat.format(mDate);
     }
 
     public void setDate(Date date) {
