@@ -14,6 +14,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -27,6 +28,7 @@ public class CrimeFragment extends Fragment {
     private Crime mCrime;
     private EditText mTitleField; // 输入框
     private Button mDateButton; // 时间
+    private Button mDeleteButton; // 删除按钮
     private CheckBox mSolvedCheckBox; // 单选框
 
     private static final String ARG_CRIME_ID = "crime_id";
@@ -91,6 +93,17 @@ public class CrimeFragment extends Fragment {
                 // 匿名实例不能直接使用 this.
                 dialog.setTargetFragment(CrimeFragment.this, REQUEST_DATE);
                 dialog.show(manager, DIALOG_DATE);
+            }
+        });
+
+        mDeleteButton = v.findViewById(R.id.crime_delete);
+        mDeleteButton.setText(R.string.crime_delete_label);
+        mDeleteButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CrimeLab.get(getActivity()).deleteCrime(mCrime.getId());
+                AppCompatActivity activity = (AppCompatActivity) getActivity();
+                activity.finish();
             }
         });
 
