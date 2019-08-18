@@ -1,6 +1,7 @@
 package com.codve.criminalintent;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -47,12 +48,29 @@ public class CrimeFragment extends Fragment {
     private Button mSuspectButton; // 添加嫌疑人按钮
     private ImageButton mPhotoButton; // 拍照按钮
     private ImageView mPhotoView; //预览图
+    private Callbacks mCallbacks;
 
     private static final String ARG_CRIME_ID = "crime_id";
     private static final String DIALOG_DATE = "DialogDate";
     private static final int REQUEST_DATE = 0;
     private static final int REQUEST_CONTACT = 2;
     private static final int REQUEST_PHOTO = 4;
+
+    public interface Callbacks {
+        void onCrimeUpdated(Crime crime);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mCallbacks = (Callbacks) context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallbacks = null;
+    }
 
     // 创建 fragment 实例, 并传入 argument
     public static CrimeFragment newInstance(UUID crimeId) {
@@ -100,6 +118,7 @@ public class CrimeFragment extends Fragment {
                     CharSequence s, int start, int before, int count
             ) {
                 mCrime.setTitle(s.toString());
+                updateCrime();
             }
 
             @Override
@@ -129,6 +148,7 @@ public class CrimeFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 mCrime.setSolved(b);
+                updateCrime();
             }
         });
 
@@ -222,6 +242,7 @@ public class CrimeFragment extends Fragment {
                     .getSerializableExtra(DatePickerFragment.EXTRA_DATE);
             mCrime.setDate(date);
             updateDate();
+            updateCrime();
         } else if (requestCode == REQUEST_CONTACT && data != null) {
             // 联系人也有数据库
             Uri contactUri = data.getData();
@@ -238,6 +259,7 @@ public class CrimeFragment extends Fragment {
                 cursor.moveToFirst();
                 String suspect = cursor.getString(0);
                 mCrime.setSuspect(suspect);
+                updateCrime();
                 mSuspectButton.setText(suspect);
             } finally {
                 cursor.close();
@@ -249,8 +271,14 @@ public class CrimeFragment extends Fragment {
             // 回收权限
             getActivity().revokeUriPermission(uri,
                     Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            updateCrime();
             updatePhotoView();
         }
+    }
+
+    private void updateCrime() {
+        CrimeLab.get(getActivity()).updateCrime(mCrime);
+        mCallbacks.onCrimeUpdated(mCrime);
     }
 
     private void updateDate() {
