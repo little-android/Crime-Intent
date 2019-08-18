@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -205,9 +206,8 @@ public class CrimeFragment extends Fragment {
             }
         });
 
-
-
         mPhotoView = (ImageView) v.findViewById(R.id.crime_photo);
+        updatePhotoView();
         return v;
     }
 
@@ -242,6 +242,14 @@ public class CrimeFragment extends Fragment {
             } finally {
                 cursor.close();
             }
+        } else if (requestCode == REQUEST_PHOTO) {
+            Uri uri = FileProvider.getUriForFile(getActivity(),
+                    "com.codve.criminalintent.fileprovider",
+                    mPhotoFile);
+            // 回收权限
+            getActivity().revokeUriPermission(uri,
+                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            updatePhotoView();
         }
     }
 
@@ -270,6 +278,17 @@ public class CrimeFragment extends Fragment {
         String report = getString(R.string.crime_report,
                 mCrime.getTitle(), dateString, solvedString, suspect);
         return report;
+    }
+
+    // 设置预览图
+    private void updatePhotoView() {
+        if (mPhotoFile == null || !mPhotoFile.exists()) {
+            mPhotoView.setImageDrawable(null);
+        } else {
+            Bitmap bitmap = PictureUtils.getScaledBitmap(
+                    mPhotoFile.getPath(), getActivity());
+            mPhotoView.setImageBitmap(bitmap);
+        }
     }
 
 }
