@@ -50,6 +50,7 @@ public class CrimeFragment extends Fragment {
 
     private static final String ARG_CRIME_ID = "crime_id";
     private static final String DIALOG_DATE = "DialogDate";
+    private static final String DIALOG_PREVIEW = "DialogPreview";
     private static final int REQUEST_DATE = 0;
     private static final int REQUEST_CONTACT = 2;
     private static final int REQUEST_PHOTO = 4;
@@ -208,6 +209,14 @@ public class CrimeFragment extends Fragment {
 
         mPhotoView = (ImageView) v.findViewById(R.id.crime_photo);
         updatePhotoView();
+        mPhotoView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager manager = getFragmentManager();
+                PreviewFragment dialog = PreviewFragment.newInstance(mPhotoFile);
+                dialog.show(manager, DIALOG_PREVIEW);
+            }
+        });
         return v;
     }
 
@@ -284,6 +293,7 @@ public class CrimeFragment extends Fragment {
     private void updatePhotoView() {
         if (mPhotoFile == null || !mPhotoFile.exists()) {
             mPhotoView.setImageDrawable(null);
+            mPhotoView.setEnabled(false); //没有图片就不要点击了
         } else {
             Bitmap bitmap = PictureUtils.getScaledBitmap(
                     mPhotoFile.getPath(), getActivity());
