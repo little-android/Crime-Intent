@@ -170,9 +170,7 @@ public class CrimeListFragment extends Fragment {
         CrimeLab crimeLab = CrimeLab.get(getActivity());
         int crimeCount = crimeLab.getCrimes().size();
 
-        // 使用复数字符串资源
-        String subtitle = getResources()
-                .getQuantityString(R.plurals.subtitle_plural, crimeCount, crimeCount);
+        String subtitle = getString(R.string.subtitle_format, crimeCount);
 
         if (!mSubtitleVisible) {
             subtitle = null;
