@@ -97,39 +97,6 @@ public class CrimeListFragment extends Fragment {
         updateSubtitle();
     }
 
-    private class CrimeHolder extends RecyclerView.ViewHolder
-            implements View.OnClickListener{
-
-        private TextView mTitleTextView; // 标题文本框
-        private TextView mDateTextView; // 日期文本框
-        private ImageView mSolvedImageView; // 图片框
-        private Crime mCrime;
-
-        public CrimeHolder(LayoutInflater inflater, ViewGroup parent) {
-            super(inflater.inflate(R.layout.list_item_crime, parent, false));
-            itemView.setOnClickListener(this);
-
-            // ViewHolder 自带 itemView
-            mTitleTextView = (TextView) itemView.findViewById(R.id.crime_title);
-            mDateTextView = (TextView) itemView.findViewById(R.id.crime_date);
-            mSolvedImageView = (ImageView) itemView.findViewById(R.id.crime_solved);
-        }
-
-        // 绑定数据
-        public void bind(Crime crime) {
-            mCrime = crime;
-            mTitleTextView.setText(mCrime.getTitle());
-            mDateTextView.setText(mCrime.getFormatDate());
-            mSolvedImageView.setVisibility(crime.isSolved() ? View.VISIBLE : View.GONE);
-        }
-
-        // 响应点击
-        @Override
-        public void onClick(View view) {
-            mCallbacks.onCrimeSelected(mCrime);
-        }
-    }
-
     // 创建菜单项
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -179,6 +146,38 @@ public class CrimeListFragment extends Fragment {
         activity.getSupportActionBar().setSubtitle(subtitle);
     }
 
+    private class CrimeHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener{
+
+        private TextView mTitleTextView; // 标题文本框
+        private TextView mDateTextView; // 日期文本框
+        private ImageView mSolvedImageView; // 图片框
+        private Crime mCrime;
+
+        public CrimeHolder(LayoutInflater inflater, ViewGroup parent) {
+            // 实例化视图, 并赋值给属性 itemView
+            super(inflater.inflate(R.layout.list_item_crime, parent, false));
+            itemView.setOnClickListener(this);
+
+            mTitleTextView = (TextView) itemView.findViewById(R.id.crime_title);
+            mDateTextView = (TextView) itemView.findViewById(R.id.crime_date);
+            mSolvedImageView = (ImageView) itemView.findViewById(R.id.crime_solved);
+        }
+
+        // 绑定数据
+        public void bind(Crime crime) {
+            mCrime = crime;
+            mTitleTextView.setText(mCrime.getTitle());
+            mDateTextView.setText(mCrime.getFormatDate());
+            mSolvedImageView.setVisibility(crime.isSolved() ? View.VISIBLE : View.GONE);
+        }
+
+        // 响应点击
+        @Override
+        public void onClick(View view) {
+            mCallbacks.onCrimeSelected(mCrime);
+        }
+    }
 
     private class CrimeAdapter extends RecyclerView.Adapter<CrimeHolder> {
         private List<Crime> mCrimes;
@@ -187,6 +186,7 @@ public class CrimeListFragment extends Fragment {
             mCrimes = crimes;
         }
 
+        // 创建新的 ViewHolder
         @NonNull
         @Override
         public CrimeHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -194,6 +194,7 @@ public class CrimeListFragment extends Fragment {
             return new CrimeHolder(layoutInflater, parent);
         }
 
+        // 从模型获取数据
         @Override
         public void onBindViewHolder(@NonNull CrimeHolder holder, int position) {
             Crime crime = mCrimes.get(position);
