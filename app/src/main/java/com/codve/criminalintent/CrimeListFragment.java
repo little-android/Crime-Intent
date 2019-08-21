@@ -69,6 +69,7 @@ public class CrimeListFragment extends Fragment {
         return view;
     }
 
+    // 回复显示时重新获取数据.
     @Override
     public void onResume() {
         super.onResume();
