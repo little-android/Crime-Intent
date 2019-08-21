@@ -25,7 +25,9 @@ public class CrimeListFragment extends Fragment {
     private RecyclerView mCrimeRecyclerView;
     private CrimeAdapter mAdapter;
     private boolean mSubtitleVisible; // 是否显示菜单的子标题
+    private int mCrimePosition; // 点击的 crime 位置.
     private static final String SAVED_SUBTITLE_VISIBLE = "subtitle";
+    private static final String CRIME_POSITION = "crime_position";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,7 @@ public class CrimeListFragment extends Fragment {
         // 从 bundle 中读取子标题原来的状态
         if (savedInstanceState != null) {
             mSubtitleVisible = savedInstanceState.getBoolean(SAVED_SUBTITLE_VISIBLE);
+            mCrimePosition = savedInstanceState.getInt(CRIME_POSITION);
         }
         updateUI();
         return view;
@@ -57,10 +60,12 @@ public class CrimeListFragment extends Fragment {
 
     // 保存实例的子标题状态
     // 当旋转设备重绘窗口时, 子标题的状态依然是原来的状态.
+    // 当列表页重新绘制时, 只更新点击过的列表项
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(SAVED_SUBTITLE_VISIBLE, mSubtitleVisible);
+        outState.putInt(CRIME_POSITION, mCrimePosition);
     }
 
     private void updateUI() {
@@ -72,7 +77,8 @@ public class CrimeListFragment extends Fragment {
             mCrimeRecyclerView.setAdapter(mAdapter);
         } else {
             mAdapter.setCrimes(crimes);
-            mAdapter.notifyDataSetChanged();
+//            mAdapter.notifyDataSetChanged();
+            mAdapter.notifyItemChanged(mCrimePosition);
         }
         updateSubtitle();
     }
@@ -106,6 +112,7 @@ public class CrimeListFragment extends Fragment {
         // 响应点击
         @Override
         public void onClick(View view) {
+            mCrimePosition = this.getLayoutPosition();  // 保存点击位置
             Intent intent = CrimePagerActivity.newIntent(getActivity(), mCrime.getId());
             startActivity(intent);
         }
