@@ -22,4 +22,6 @@
     <string name="crime_report_suspect">the suspect is %s.</string>
     <string name="crime_report_subject">CriminalIntent Crime Report</string>
     <string name="send_report">Send crime report via</string>
+    <string name="first_button">First</string>
+    <string name="last_button">Last</string>
 </resources>

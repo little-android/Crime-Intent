@@ -3,6 +3,8 @@ package com.codve.criminalintent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -16,6 +18,9 @@ import java.util.UUID;
 public class CrimePagerActivity extends AppCompatActivity {
 
     private ViewPager mViewPager;
+    private Button mFirstButton;
+    private Button mLastButton;
+
     private List<Crime> mCrimes;
     private static final String EXTRA_CRIME_ID =
             "com.codve.criminalIntent.crime_id";
@@ -59,5 +64,21 @@ public class CrimePagerActivity extends AppCompatActivity {
                 break;
             }
         }
+
+        mFirstButton = (Button) findViewById(R.id.first_button);
+        mFirstButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mViewPager.setCurrentItem(0);
+            }
+        });
+
+        mLastButton = (Button) findViewById(R.id.last_button);
+        mLastButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mViewPager.setCurrentItem(mCrimes.size() - 1);
+            }
+        });
     }
 }
