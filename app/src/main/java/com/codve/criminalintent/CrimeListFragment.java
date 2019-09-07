@@ -77,8 +77,9 @@ public class CrimeListFragment extends Fragment {
             mCrimeRecyclerView.setAdapter(mAdapter);
         } else {
             mAdapter.setCrimes(crimes);
-//            mAdapter.notifyDataSetChanged();
-            mAdapter.notifyItemChanged(mCrimePosition);
+            mAdapter.notifyDataSetChanged();
+//            mAdapter.notifyItemChanged(mCrimePosition);
+            // 在删除列表项后, 需要更新所有数据集.
         }
         updateSubtitle();
     }
