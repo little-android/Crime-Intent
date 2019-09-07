@@ -14,7 +14,7 @@ public class CrimeBaseHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, VERSION);
     }
 
-    // 创建数据库
+    // 创建数据表
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table " + CrimeTable.NAME + "(" +
