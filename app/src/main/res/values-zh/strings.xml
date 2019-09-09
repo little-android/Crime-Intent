@@ -9,7 +9,6 @@
     <string name="new_crime">新增记录</string>
     <string name="show_subtitle">显示子标题</string>
     <string name="hide_subtitle">隐藏子标题</string>
-    <string name="subtitle_format">%1$d crimes</string>
     <string name="crime_suspect_text">选择嫌疑人</string>
     <string name="crime_report_text">发送报告</string>
     <string name="crime_report">%1$s! criem 发生于 %2$s. %3$s, %4$s</string>
