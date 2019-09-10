@@ -156,9 +156,9 @@ public class CrimeListFragment extends Fragment {
         private ImageView mSolvedImageView; // 图片框
         private Crime mCrime;
 
-        public CrimeHolder(LayoutInflater inflater, ViewGroup parent) {
-            // 实例化视图, 并赋值给属性 itemView
-            super(inflater.inflate(R.layout.list_item_crime, parent, false));
+        public CrimeHolder(View itemView) {
+            //并赋值给属性 itemView
+            super(itemView);
             itemView.setOnClickListener(this);
 
             mTitleTextView = (TextView) itemView.findViewById(R.id.crime_title);
@@ -193,7 +193,9 @@ public class CrimeListFragment extends Fragment {
         @Override
         public CrimeHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-            return new CrimeHolder(layoutInflater, parent);
+            View view = layoutInflater
+                    .inflate(R.layout.list_item_crime, parent, false);
+            return new CrimeHolder(view);
         }
 
         // 从模型获取数据
