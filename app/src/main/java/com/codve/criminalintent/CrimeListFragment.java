@@ -154,7 +154,6 @@ public class CrimeListFragment extends Fragment {
         private Crime mCrime;
 
         public CrimeHolder(View itemView) {
-            //并赋值给属性 itemView
             super(itemView);
             itemView.setOnClickListener(this);
 
